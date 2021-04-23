@@ -1,4 +1,7 @@
 import { getEmployees } from "./database.js"
+import { getOrders } from "./database.js"
+
+const orders = getOrders()
 
 document.addEventListener(
     "click",
@@ -6,10 +9,16 @@ document.addEventListener(
         const employeeClicked = clickEvent.target
         if(employeeClicked.id.startsWith("employee")) {
             const [,employeeId] = employeeClicked.id.split("--")
+            const matchingOrders = []
 
             for(const employee of employees) {
                 if(employee.id === parseInt(employeeId)) {
-                    window.alert(`${employee.name} has sold x number of products`)
+                    for(const order of orders) {
+                        if(employee.id === order.employeeId) {
+                            matchingOrders.push(order)
+                        }
+                    }
+                    window.alert(`${employee.name} has sold ${matchingOrders.length} products`)
                 }
             }
         }
